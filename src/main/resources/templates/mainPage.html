@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+  <title>롤 전적 검색</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    /* 스타일링을 위한 CSS 코드 */
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      text-align: center;
+      font-family: 'Noto Sans KR', sans-serif;
+      margin-top: 0px;
+    }
+
+    .header {
+      background-color: #f8f9fa;
+      padding: 20px;
+      width: 100%;
+    }
+
+    .logo {
+      margin-bottom: 20px;
+    }
+
+    .search-box {
+      margin-top: 20px;
+    }
+
+    .image {
+      margin-top: 20px;
+    }
+
+    .navbar {
+      width:100%;
+      background-color: #f8f9fa;
+      border-top: 1px solid #dee2e6; /* 구분선 추가 */
+      border-bottom: 1px solid #dee2e6; /* 구분선 추가 */
+    }
+
+    .navbar .navbar-nav {
+      margin: auto;
+      flex-direction: row;
+    }
+
+    .navbar-expand-lg {
+      justify-content: center;
+    }
+
+    .navbar .nav-item:not(:last-child) {
+      margin-right: 10px; /* 메뉴 항목 사이 간격 조정 */
+    }
+
+    .footer {
+      background-color: #f8f9fa;
+      padding: 20px;
+      margin-top: auto;
+      width: 100%;
+    }
+
+    .container-lg {
+      max-width: 900px;
+    }
+    .logo{
+        margin-top: 70px;
+    }
+    #logo{
+        width:426px;
+        height: 163px;
+    }
+    .under-container{
+        background-color: #f8f9fa;
+        width: 90%;
+        height: 400px;
+        display:flex;
+    }
+    .under-container1{
+        background-color: skyblue;
+        margin: 10px;
+        width: 50%;
+        height: 400px;
+    }
+    .under-container2{
+        background-color: tomato;
+        width: 50%;
+        height: 400px;
+        margin: 10px;
+    }
+  </style>
+</head>
+<body>
+<!-- 헤더 -->
+<header class="header">
+  <div class="container-lg">
+    <h1>롤</h1>
+  </div>
+</header>
+
+<!-- 메뉴바 -->
+<nav class="navbar navbar-expand-lg navbar-light">
+  <div class="container-lg">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item active">
+          <a class="nav-link" href="#">홈</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">전적 검색</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">순위</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">게시판</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- 로고 -->
+<div class="logo">
+  <img id="logo" src="/img/logo.png" alt="로고">
+</div>
+
+<!-- 검색 기능 -->
+<div class="search-box">
+  <div class="container-lg">
+    <form action="/searchName">
+      <div class="input-group mb-3">
+        <input name="nickname" type="text" class="form-control" placeholder="소환사명을 입력하세요">
+        <div class="input-group-append">
+          <button class="btn btn-primary" type="submit">검색</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- 네모 -->
+<div class="under-container">
+  <div class="under-container1">
+
+  </div>
+  <div class="under-container2">
+
+  </div>
+</div>
+
+<!-- 푸터 -->
+<footer class="footer mt-auto">
+  <div class="container-lg">
+    <p>&copy; 2023 롤 전적 검색. made by 김도현</p>
+  </div>
+</footer>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
