@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 
   <title>롤 전적 검색</title>
@@ -132,9 +132,9 @@
 <!-- 검색 기능 -->
 <div class="search-box">
   <div class="container-lg">
-    <form action="/searchName">
+    <form action="#" th:action="@{/summoner/{nickname}(nickname=*{nickname})}" method="get">
       <div class="input-group mb-3">
-        <input name="nickname" type="text" class="form-control" placeholder="소환사명을 입력하세요">
+        <input name="nickname"  type="text" class="form-control" placeholder="소환사명을 입력하세요">
         <div class="input-group-append">
           <button class="btn btn-primary" type="submit">검색</button>
         </div>
@@ -159,7 +159,6 @@
     <p>&copy; 2023 롤 전적 검색. made by 김도현</p>
   </div>
 </footer>
-
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
