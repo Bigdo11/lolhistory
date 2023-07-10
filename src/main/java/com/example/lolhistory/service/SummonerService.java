@@ -118,4 +118,5 @@ public class SummonerService {
         return String.format("https://ddragon.leagueoflegends.com/cdn/%s/img/profileicon/%d.png", version, iconId);
     }
 
+    public String getWin
 }
