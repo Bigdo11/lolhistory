@@ -4,10 +4,21 @@
   <title>롤 전적 정보</title>
 </head>
 <body>
-<h2 th:text="${nickname}"></h2>
+<h2 th:text="${name}"></h2>
 <p>레벨: <span th:text="${level}"></span></p>
-<p>승리: <span th:text="${wins}"></span></p>
-<p>패배: <span th:text="${losses}"></span></p>
+<p>승리: <span th:text="${winCount}"></span></p>
+<p>패배: <span th:text="${loseCount}"></span></p>
 <img th:src="${iconUrl}">
+<div th:each="groupOfTwo : ${summonerNames}">
+  <h2>날짜</h2>
+  <div th:each="groupOfFive, index : ${groupOfTwo}">
+    <h3 th:if="${index.index % 2 == 0}">블루팀</h3>
+    <h3 th:if="${index.index % 2 == 1}">레드팀</h3>
+    <ul>
+    <ul>
+      <li th:each="summonerName : ${groupOfFive}" th:text="${summonerName}"></li>
+    </ul>
+  </div>
+</div>
 </body>
 </html>

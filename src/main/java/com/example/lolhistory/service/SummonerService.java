@@ -1,13 +1,14 @@
 package com.example.lolhistory.service;
 
+import com.example.lolhistory.dto.InfoDTO;
 import com.example.lolhistory.dto.MatchDTO;
+import com.example.lolhistory.dto.ParticipantDTO;
 import com.example.lolhistory.dto.SummonerDTO;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -38,6 +39,7 @@ public class SummonerService {
         return null;
     }
     //닉네임으로 puuid가져오기
+
     public String getPuuidBySummonerName(String nickname) {
         String summonerUrl = "https://kr.api.riotgames.com/lol/summoner/v4/summoners/by-name/{summonerName}?api_key=" + apiKey;
 
@@ -49,7 +51,7 @@ public class SummonerService {
 
         return summonerDTO != null ? summonerDTO.getPuuid() : "";
     }
-
+    //puuid로 매치id가져오기
     public List<String> getMatchIdByPuuid(String puuid) {
         String matchesUrl = "https://asia.api.riotgames.com/lol/match/v5/matches/by-puuid/{puuid}/ids?start=0&count=20&api_key=" + apiKey;
 
@@ -66,8 +68,40 @@ public class SummonerService {
         return Collections.emptyList();
     }
 
+    public List<String> getSummonerMatchHistory(String puuid){
+        String matchHistoryUrl = "https://asia.api.riotgames.com/lol/match/v5/matches/by-puuid/{puuid}/ids?start=0&count=20&api_key=" + apiKey;
+
+        List<String> matchIds = webClient.get()
+                .uri(matchHistoryUrl, puuid)
+                .retrieve()
+                .bodyToMono(new ParameterizedTypeReference<List<String>>() {
+                })
+                .block();
+
+        if (matchIds != null) {
+            return matchIds;
+        }
+
+        return Collections.emptyList();
+    }
+
+    //매치아이디로 인게임 정보 가져오기
+    public MatchDTO getMatchDetailsById(String matchId) {
+        String matchDetailsUrl = "https://asia.api.riotgames.com/lol/match/v5/matches/{matchId}?api_key=" + apiKey;
+
+        MatchDTO matchDTO = webClient.get()
+                .uri(matchDetailsUrl, matchId)
+                .retrieve()
+                .bodyToMono(MatchDTO.class)
+                .block();
 
 
+        return matchDTO;
+    }
+
+
+
+    //닉네임으로 소환사 정보 가져오기
     public int getSummonerLevelByNickname(String nickname) {
         String summonerUrl = "https://kr.api.riotgames.com/lol/summoner/v4/summoners/by-name/{nickname}?api_key=" + apiKey;
 
@@ -80,10 +114,29 @@ public class SummonerService {
 
         if (summonerDTO != null) {
             return summonerDTO.getSummonerLevel();
+
         }
 
         return 0;
     }
+
+    public String getSummonerInfoByNickname(String nickname) {
+        String summonerUrl = "https://kr.api.riotgames.com/lol/summoner/v4/summoners/by-name/{nickname}?api_key=" + apiKey;
+
+
+        SummonerDTO summonerDTO = webClient.get()
+                .uri(summonerUrl, nickname)
+                .retrieve()
+                .bodyToMono(SummonerDTO.class)
+                .block();
+
+        if (summonerDTO != null) {
+            return summonerDTO.getName();
+        }
+        return "";
+    }
+
+    //닉네임으로 소환사 아이콘 주소 가져오기
     public int getSummonerIconByNickname(String nickname) {
         String summonerUrl = "https://kr.api.riotgames.com/lol/summoner/v4/summoners/by-name/{nickname}?api_key=" + apiKey;
 
@@ -94,14 +147,15 @@ public class SummonerService {
                 .block();
 
         if (summonerDTO != null) {
-            // 소환사 아이콘 이미지 URL 반환
+
             return summonerDTO.getProfileIconId();
         }
 
-        // 예외 처리: 아이콘 이미지를 가져오지 못한 경우 null 또는 다른 처리를 수행할 수 있습니다.
+
         return 0;
     }
 
+    //버전 가져오기
     public String getLatestDdragonVersion() {
         String versionUrl = "https://ddragon.leagueoflegends.com/api/versions.json";
 
@@ -114,9 +168,8 @@ public class SummonerService {
         return versions != null ? versions[0] : null;
     }
 
+    //아이콘 주소로 아이콘 이미지 가져오기
     public String getSummonerIconUrl(int iconId, String version) {
         return String.format("https://ddragon.leagueoflegends.com/cdn/%s/img/profileicon/%d.png", version, iconId);
     }
-
-    public String getWin
 }
