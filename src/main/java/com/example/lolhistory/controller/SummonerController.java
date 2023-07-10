@@ -2,7 +2,6 @@ package com.example.lolhistory.controller;
 
 import com.example.lolhistory.dto.SummonerDTO;
 import com.example.lolhistory.service.SummonerService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,10 +21,16 @@ public class SummonerController {
     public String getSummonerInfo(@RequestParam("nickname") String nickname,String losses, String wins, String level, Model model) {
         String summonerId = summonerService.getSummonerIdByNickname(nickname);
         int summonerLevel= summonerService.getSummonerLevelByNickname(nickname);
+        //아이콘 id
+        int iconId =summonerService.getSummonerIconByNickname(nickname);
+        //버전
+        String version = summonerService.getLatestDdragonVersion();
 
+        String iconUrl = summonerService.getSummonerIconUrl(iconId,version);
 
         model.addAttribute("nickname", nickname);
         model.addAttribute("level",summonerLevel);
+        model.addAttribute("iconUrl",iconUrl);
         return "summoner";
     }
 }
