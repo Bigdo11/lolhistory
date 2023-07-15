@@ -26,7 +26,7 @@ public class SummonerController {
     @GetMapping("/")
     public String getSummonerInfo(@RequestParam("nickname") String nickname,String losses, String wins, String level, Model model) {
        //레벨
-        String name = summonerService.getSummonerInfoByNickname(nickname);
+        String name = summonerService.getSummonerInfoByNickname(nickname); //진짜 닉네임 구하기 (logicalmoving -> Logical Moving)
         String summonerId = summonerService.getSummonerIdByNickname(name);
         int summonerLevel= summonerService.getSummonerLevelByNickname(name);
 
@@ -44,7 +44,7 @@ public class SummonerController {
         int winCount = 0;
         int loseCount = 0;
         boolean userWin = false;
-
+        List<Boolean> userWins = new ArrayList<>();
         //
 
 
@@ -56,13 +56,15 @@ public class SummonerController {
 
             for(ParticipantDTO participant : participants){
                 String summonerName = participant.getSummonerName();
+                //승리 몇번했는지
                 boolean isWin = participant.isWin();
-                if(summonerName.equalsIgnoreCase(name)){
+                if(summonerName.equals(name)){
                     userWin = participant.isWin();
-                    break;
                 }
                 summonerNames.add(summonerName);
+                System.out.println(summonerNames);
                 }
+            userWins.add(userWin);
             if(userWin){
                 winCount++;
             }
@@ -90,6 +92,7 @@ public class SummonerController {
         model.addAttribute("iconUrl",iconUrl);
         model.addAttribute("winCount",winCount);
         model.addAttribute("loseCount",loseCount);
+        model.addAttribute("userWins",userWins);
         return "summoner";
     }
 }

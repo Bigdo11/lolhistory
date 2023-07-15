@@ -18,6 +18,7 @@
     <ul>
       <li th:each="summonerName : ${groupOfFive}" th:text="${summonerName}"></li>
     </ul>
+      <p th:if="${userWins[index.index]}">승리</p>
   </div>
 </div>
 </body>
