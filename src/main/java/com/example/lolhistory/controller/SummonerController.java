@@ -62,7 +62,6 @@ public class SummonerController {
                     userWin = participant.isWin();
                 }
                 summonerNames.add(summonerName);
-                System.out.println(summonerNames);
                 }
             userWins.add(userWin);
             if(userWin){
