@@ -126,13 +126,13 @@
 
 <!-- 로고 -->
 <div class="logo">
-  <img id="logo" src="/img/logo.png" alt="로고">
+  <img id="logo" src="/images/logo.png" alt="로고">
 </div>
 
 <!-- 검색 기능 -->
 <div class="search-box">
   <div class="container-lg">
-    <form action="#" th:action="@{/summoner/{nickname}(nickname=*{nickname})}" method="get">
+    <form action="#" th:action="@{/summoner/{nickname}(nickname=*{name})}" method="get">
       <div class="input-group mb-3">
         <input name="nickname"  type="text" class="form-control" placeholder="소환사명을 입력하세요">
         <div class="input-group-append">

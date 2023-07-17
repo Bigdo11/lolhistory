@@ -7,4 +7,5 @@ import java.util.List;
 @Data
 public class InfoDTO {
     private List<ParticipantDTO> participants;
+    private long gameStartTimestamp;
 }

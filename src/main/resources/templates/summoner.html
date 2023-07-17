@@ -2,133 +2,220 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>롤 전적 정보</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
-      body {
-        font-family: Arial, sans-serif;
-        line-height: 1.6;
-      }
-       .profile-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-wrap: nowrap;
-        margin-bottom: 20px;
-        padding-bottom: 15px;
-        border-bottom: 1px solid #ccc;
-      }
-      h1 {
-      margin: 0;
-      font-size: 24px;
-      }
-       .tier{
-        margin: 0 10px;
-        width: 25%;
-      }
-       .icon{
-       margin: 0 10px;
-      }
-      .profile-info  {
-        display: flex;
-        flex-direction: column;
-      }
-      h2 {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 10px;
-        padding-bottom: 5px;
-        border-bottom: 1px solid #ccc;
-      }
-      h3 {
-        margin-bottom: 10px;
-        padding-bottom: 5px;
-      }
-      .team-container {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        margin-bottom: 20px;
-      }
-      .team {
-        width: 45%;
-        font-size: 14px;
-        list-style: none;
-        padding: 15px;
-        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
-      }
-      .win {
-        align-items:center;
-        background-color: #e2f0e2;
+        .header {
+          background-color: #f8f9fa;
+          padding: 20px;
+          width: 100%;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+        }
+        .profile-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: nowrap;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #ccc;
+            height:200px;
+        }
 
-      }
-      .lose {
-        align-items: center;
-        background-color: #fce8e8;
+        h1 {
+            margin: 0;
+            font-size: 24px;
+            width:50%;
+        }
+        .nickname-container {
+            display:flex;
+            width: 300px;
+            text-align: center;
+            align-items: center;
+        }
+        .tier {
+            margin: 0 10px;
+            width: 15%;
+        }
+        .icon {
+            margin: 0 10px;
+            height: 100px;
+        }
+        .profile-info {
+            display: flex;
+        }
+        h2 {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #ccc;
+        }
+        h3 {
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+        }
+        .team-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
 
-      }
-      .arrow {
-        cursor: pointer;
-      }
-      .results-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-        margin-bottom: 20px;
-      }
+        .team {
+            width: 45%;
+            font-size: 11px;
+            list-style: none;
+            padding: 15px;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        .win {
+            width:70%;
+            align-items: center;
+            background-color: #e2f0e2;
+        }
+        .lose {
+            width:70%;
+            align-items: center;
+            background-color: #fce8e8;
+        }
 
+        .arrow {
+            cursor: pointer;
+        }
+        .results-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            margin-bottom: 20px;
+        }
+
+        .search-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .container-lg {
+            max-width: 900px;
+        }
+        .footer {
+            background-color: #f8f9fa;
+            padding: 20px;
+            margin-top: auto;
+            width: 100%;
+        }
+        .info-container{
+            display:flex;
+            flex-direction: column;
+            align-self:center;
+            width:30%;
+        }
+        p{
+            font-size:90%;
+        }
+        input[type=search] {
+            width: 250px;
+        }
+        .blue-team-bg {
+            background-color: #ffffff;
+            color: blue;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        .red-team-bg {
+            background-color: #ffffff;
+            color: red;
+            padding: 10px;
+        }
+        .summoner{
+            padding:10px;
+        }
     </style>
     <script>
-      function toggleDetails(element) {
-        var teamContainer = element.parentElement.nextElementSibling;
-        var arrow = element;
-        if (teamContainer.style.display === "none") {
-          teamContainer.style.display = "flex";
-          arrow.innerHTML = "&#x25B2;";
-        } else {
-          teamContainer.style.display = "none";
-          arrow.innerHTML = "&#x25BC;";
+        function toggleDetails(element) {
+            var teamContainer = element.parentElement.nextElementSibling;
+            var arrow = element;
+            if (teamContainer.style.display === "none") {
+                teamContainer.style.display = "flex";
+                arrow.innerHTML = "&#x25B2;";
+            } else {
+                teamContainer.style.display = "none";
+                arrow.innerHTML = "&#x25BC;";
+            }
         }
-      }
-
-
     </script>
 </head>
 <body>
-<div class="profile-container">
-    <img class="icon" th:src="${iconUrl}">
-    <div class="profile-info"> <!-- 새로운 클래스 적용 -->
-        <h1 th:text="${name}"></h1>
-        <img class="tier" th:src="${iconUrl}">
-        <div>
-            <p>레벨: <span th:text="${level}"></span></p>
-            <p>승리: <span th:text="${winCount}"></span></p>
-            <p>패배: <span th:text="${loseCount}"></span></p>
+<header class="header">
+    <div class="container-lg">
+        <h1></h1>
+    </div>
+</header>
+<div class="container">
+    <div class="profile-container">
+        <img class="tier" th:src="${tierUrl}">
+        <div class="profile-info"> <!-- 새로운 클래스 적용 -->
+            <div class="nickname-container">
+                <h1 th:text="${name}"></h1> <img class="icon" th:src="${iconUrl}">
+            </div>
+            <div class="info-container">
+                <p>레벨: <span th:text="${level}"></span></p>
+                <p>승리: <span th:text="${winCount}"></span></p>
+                <p>패배: <span th:text="${loseCount}"></span></p>
+                <p>티어: <span th:text="${tier}"></span>
+                    <span th:text="${rank}"></span></p>
+
+            </div>
+        </div>
+    </div>
+    <!-- 추가된 코드 -->
+    <div class="search-container">
+        <form th:action="@{/summoner/{nickname}(nickname=*{nickname})}" method="get">
+            <input type="search" placeholder="닉네임" th:name="nickname">
+            <button class="btn btn-outline-primary" type="submit">검색</button>
+        </form>
+    </div>
+    <div class="results-container">
+        <div th:each="data, index : ${timesSummonersData}"
+             th:class="${userWins[index.index]} ? 'win team' : 'lose team'">
+            <h2>
+                <span th:text="${data.value}"></span>
+                <!-- 승리 여부 표시 -->
+                <span th:if="${userWins[index.index]}" class="win">승리</span>
+                <span th:if="${!userWins[index.index]}" class="lose">패배</span>
+                <span class="arrow" onclick="toggleDetails(this)">&#x25BC;</span>
+            </h2>
+            <div class="team-container" style="display: none;">
+                <div class="blue-red-container" th:each="groupOfFive, indexFive : ${data.key}">
+
+                    <div th:class="${indexFive.index % 2 == 0} ? 'blue-red-container blue-team-bg' : 'blue-red-container red-team-bg'"> <!-- 수정된 코드 -->
+                        <div th:class="${indexFive.index % 2 == 0} ? '<h3>블루팀</h3>' : '<h3>레드팀</h3>'">
+                        </div>
+
+                    <div class="summoner-group" >
+                        <div class="summoner" th:each="summonerName : ${groupOfFive}">
+                            <a th:href="@{'http://localhost:8080/summoner/?nickname=' + ${summonerName}}" th:text="${summonerName}"></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
-<div class="results-container">
-<div th:each="groupOfTwo, indexTwo : ${summonerNames}"
-     th:class="${userWins[indexTwo.index]} ? 'win team' : 'lose team'">
-  <h2><!-- 새로운 클래스 적용 -->
-      날짜
-      <!-- 승리 여부 표시 -->
-      <span th:if="${userWins[indexTwo.index]}" class="win">승리</span>
-      <span th:if="${!userWins[indexTwo.index]}" class="lose">패배</span>
-    <span class="arrow" onclick="toggleDetails(this)">&#x25BC;</span>
-  </h2>
-    <div class="team-container" style="display: none;">
-        <div th:each="groupOfFive, indexFive : ${groupOfTwo}">
-            <h3 th:if="${indexFive.index % 2 == 0}">블루팀</h3>
-            <h3 th:if="${indexFive.index % 2 == 1}">레드팀</h3>
-            <ul>
-                <li th:each="summonerName : ${groupOfFive}">
-                    <a th:href="@{'http://localhost:8080/summoner/?nickname=' + ${summonerName}}" th:text="${summonerName}"></a>
-                </li>
-            </ul>
-        </div>
-      </div>
+<!-- 푸터 -->
+<footer class="footer mt-auto">
+    <div class="container-lg">
+        <p>&copy; 2023 롤 전적 검색. made by 김도현</p>
     </div>
-</div>
+</footer>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

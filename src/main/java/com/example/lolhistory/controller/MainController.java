@@ -11,7 +11,7 @@ public class MainController {
         return "mainPage";
     }
 
-    @PostMapping("/searchName")
+    @PostMapping("/searchNam e")
     public String searchName(){
         return "redirect:/소환사 페이지";
     }

@@ -1,9 +1,6 @@
 package com.example.lolhistory.service;
 
-import com.example.lolhistory.dto.InfoDTO;
-import com.example.lolhistory.dto.MatchDTO;
-import com.example.lolhistory.dto.ParticipantDTO;
-import com.example.lolhistory.dto.SummonerDTO;
+import com.example.lolhistory.dto.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
@@ -23,8 +20,9 @@ public class SummonerService {
         this.apiKey = apiKey;
     }
 
+    //id가져오기
     public String getSummonerIdByNickname(String nickname) {
-        String summonerUrl = "https://kr.api.riotgames.com/lol/summoner/v4/summoners/by-name/{nickname}?api_key="+apiKey;
+        String summonerUrl = "https://kr.api.riotgames.com/lol/summoner/v4/summoners/by-name/{nickname}?api_key=" + apiKey;
 
         SummonerDTO summonerDTO = webClient.get()
                 .uri(summonerUrl, nickname)
@@ -51,6 +49,7 @@ public class SummonerService {
 
         return summonerDTO != null ? summonerDTO.getPuuid() : "";
     }
+
     //puuid로 매치id가져오기
     public List<String> getMatchIdByPuuid(String puuid) {
         String matchesUrl = "https://asia.api.riotgames.com/lol/match/v5/matches/by-puuid/{puuid}/ids?start=0&count=20&api_key=" + apiKey;
@@ -58,7 +57,8 @@ public class SummonerService {
         List<String> matchIds = webClient.get()
                 .uri(matchesUrl, puuid)
                 .retrieve()
-                .bodyToMono(new ParameterizedTypeReference<List<String>>() {})
+                .bodyToMono(new ParameterizedTypeReference<List<String>>() {
+                })
                 .block();
 
         if (matchIds != null) {
@@ -68,7 +68,7 @@ public class SummonerService {
         return Collections.emptyList();
     }
 
-    public List<String> getSummonerMatchHistory(String puuid){
+    public List<String> getSummonerMatchHistory(String puuid) {
         String matchHistoryUrl = "https://asia.api.riotgames.com/lol/match/v5/matches/by-puuid/{puuid}/ids?start=0&count=20&api_key=" + apiKey;
 
         List<String> matchIds = webClient.get()
@@ -98,7 +98,6 @@ public class SummonerService {
 
         return matchDTO;
     }
-
 
 
     //닉네임으로 소환사 정보 가져오기
@@ -172,4 +171,27 @@ public class SummonerService {
     public String getSummonerIconUrl(int iconId, String version) {
         return String.format("https://ddragon.leagueoflegends.com/cdn/%s/img/profileicon/%d.png", version, iconId);
     }
+
+    //tier같은 정보
+
+    public LeagueEntryDTO getSummonerTier(String summonerId) {
+        String entriesUrl = "https://kr.api.riotgames.com/lol/league/v4/entries/by-summoner/{summonerId}?api_key=" + apiKey;
+
+        List<LeagueEntryDTO> leagueEntryDTOs = webClient.get()
+                .uri(entriesUrl, summonerId)
+                .retrieve()
+                .bodyToMono(new ParameterizedTypeReference<List<LeagueEntryDTO>>() {})
+                .block();
+
+        if (leagueEntryDTOs != null) {
+            for (LeagueEntryDTO leagueEntryDTO : leagueEntryDTOs) {
+                if ("RANKED_SOLO_5x5".equals(leagueEntryDTO.getQueueType())) {
+                    return leagueEntryDTO;
+                }
+            }
+        }
+
+        return null;
+    }
+
 }

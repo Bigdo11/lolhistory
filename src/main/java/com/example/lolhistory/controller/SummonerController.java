@@ -1,17 +1,18 @@
 package com.example.lolhistory.controller;
 
-import com.example.lolhistory.dto.InfoDTO;
-import com.example.lolhistory.dto.MatchDTO;
-import com.example.lolhistory.dto.ParticipantDTO;
-import com.example.lolhistory.dto.SummonerDTO;
+import com.example.lolhistory.dto.*;
 import com.example.lolhistory.service.SummonerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.SimpleDateFormat;
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Controller
 @RequestMapping("/summoner")
@@ -25,7 +26,8 @@ public class SummonerController {
     }
     @GetMapping("/")
     public String getSummonerInfo(@RequestParam("nickname") String nickname,String losses, String wins, String level, Model model) {
-       //레벨
+
+        //레벨
         String name = summonerService.getSummonerInfoByNickname(nickname); //진짜 닉네임 구하기 (logicalmoving -> Logical Moving)
         String summonerId = summonerService.getSummonerIdByNickname(name);
         int summonerLevel= summonerService.getSummonerLevelByNickname(name);
@@ -44,7 +46,14 @@ public class SummonerController {
         int winCount = 0;
         int loseCount = 0;
         boolean userWin = false;
+        String time = new String();
+        List<String> times = new ArrayList<>();
         List<Boolean> userWins = new ArrayList<>();
+
+        //날짜
+        long timeStamp = 0;
+        SimpleDateFormat sdf = new SimpleDateFormat("M/dd");
+
         //
 
 
@@ -60,6 +69,9 @@ public class SummonerController {
                 boolean isWin = participant.isWin();
                 if(summonerName.equals(name)){
                     userWin = participant.isWin();
+                    timeStamp = infoDTO.getGameStartTimestamp();
+                    time = sdf.format(timeStamp);
+                    times.add(time);
                 }
                 summonerNames.add(summonerName);
                 }
@@ -71,6 +83,8 @@ public class SummonerController {
                 loseCount++;
             }
         }
+
+
         //소환사들 5개씩 묶기
         List<List<String>> groupedSummonerNamesByFive = new ArrayList<>();
         for (int i = 0; i < summonerNames.size(); i += 5) {
@@ -84,6 +98,18 @@ public class SummonerController {
             groupedSummonerNamesByTwo.add(groupedSummonerNamesByFive.subList(i, endIndex));
         }
 
+        //소환사들과 시간 묶기
+        int minSize = Math.min(groupedSummonerNamesByTwo.size(), times.size());
+
+        List<AbstractMap.SimpleEntry<List<List<String>>, String>> timesSummonersData =
+                IntStream.range(0, minSize)
+                        .mapToObj(i -> new AbstractMap.SimpleEntry<>(groupedSummonerNamesByTwo.get(i), times.get(i)))
+                        .collect(Collectors.toList());
+
+        //
+        LeagueEntryDTO leagueEntryDTO = summonerService.getSummonerTier(summonerId);
+
+
 
         model.addAttribute("summonerNames",groupedSummonerNamesByTwo);
         model.addAttribute("name", name);
@@ -92,6 +118,20 @@ public class SummonerController {
         model.addAttribute("winCount",winCount);
         model.addAttribute("loseCount",loseCount);
         model.addAttribute("userWins",userWins);
+        model.addAttribute("times",times);
+        model.addAttribute("timesSummonersData",timesSummonersData);
+        if(leagueEntryDTO!=null){
+            String tier = leagueEntryDTO.getTier();
+            model.addAttribute("tier", tier);
+            model.addAttribute("rank", leagueEntryDTO.getRank());
+            model.addAttribute("tierUrl", "/images/tiers/" + tier.toLowerCase() + ".png");
+        }
+        else{
+            model.addAttribute("tier", "UNRANKED");
+            model.addAttribute("rank", "N/A");
+            model.addAttribute("tierUrl", "/images/tiers/unranked.png");
+        }
+
         return "summoner";
     }
 }
